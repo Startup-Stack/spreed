@@ -57,3 +57,4 @@ title: Capabilities
 
 ## 11.0
 * `config => previews => max-gif-size` - Maximum size in bytes below which a GIF can be embedded directly in the page at render time. Bigger files will be rendered statically using the preview endpoint instead. Can be set with `occ config:app:set spreed max-gif-size --value=X` where X is the new value in bytes. Defaults to 3 MB.
+* `raise-hand` - Participants can raise or lower hand, the state change is sent through signaling messages.

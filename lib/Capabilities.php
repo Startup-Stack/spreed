@@ -81,6 +81,7 @@ class Capabilities implements IPublicCapability {
 				'circles-support',
 				'force-mute',
 				'sip-support',
+				'raise-hand',
 			],
 			'config' => [
 				'attachments' => [
