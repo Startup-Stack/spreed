@@ -975,6 +975,29 @@ class RoomController extends AEnvironmentAwareController {
 	 * @PublicPage
 	 * @RequireModeratorParticipant
 	 *
+	 * @param string $description
+	 * @return DataResponse
+	 */
+	public function setDescription(string $description): DataResponse {
+		if ($this->room->getType() === Room::ONE_TO_ONE_CALL) {
+			return new DataResponse([], Http::STATUS_BAD_REQUEST);
+		}
+
+		if (mb_strlen($description) > Room::DESCRIPTION_MAXIMUM_LENGTH) {
+			return new DataResponse([], Http::STATUS_BAD_REQUEST);
+		}
+
+		$description = trim($description);
+
+		$this->room->setDescription($description);
+
+		return new DataResponse();
+	}
+
+	/**
+	 * @PublicPage
+	 * @RequireModeratorParticipant
+	 *
 	 * @return DataResponse
 	 */
 	public function deleteRoom(): DataResponse {
