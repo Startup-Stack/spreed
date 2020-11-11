@@ -324,6 +324,21 @@ const changeReadOnlyState = async function(token, readOnly) {
 	}
 }
 
+const setConversationDescription = async function(token, description) {
+	try {
+		console.debug('setting conv desc')
+		const response = await axios.put(generateOcsUrl('apps/spreed/api/v3', 2) + `room/${token}/description`, {
+			description,
+		})
+		return response
+	} catch (error) {
+		console.debug('Error while setting conversation description', error)
+		showError(t('spreed', 'Error while updating conversation description'), {
+			timeout: 5000,
+		})
+	}
+}
+
 export {
 	fetchConversations,
 	fetchConversation,
@@ -343,4 +358,5 @@ export {
 	changeReadOnlyState,
 	setConversationPassword,
 	setConversationName,
+	setConversationDescription,
 }

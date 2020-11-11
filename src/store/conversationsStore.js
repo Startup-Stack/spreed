@@ -82,6 +82,10 @@ const mutations = {
 	purgeConversationsStore(state) {
 		Object.assign(state, getDefaultState())
 	},
+
+	setConversationDescription(state, { token, description }) {
+		Vue.set(state.conversations[token], 'description', description)
+	},
 }
 
 const actions = {
@@ -208,6 +212,10 @@ const actions = {
 		conversation.displayName = name
 
 		commit('addConversation', conversation)
+	},
+
+	setConversationDescription({ commit }, { token, description }) {
+		commit('setConversationDescription', { token, description })
 	},
 
 	async setReadOnlyState({ commit, getters }, { token, readOnly }) {

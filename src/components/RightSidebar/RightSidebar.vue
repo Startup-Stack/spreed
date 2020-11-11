@@ -35,6 +35,16 @@
 		@submit-title="handleSubmitTitle"
 		@dismiss-editing="dismissEditing"
 		@close="handleClose">
+		<Description
+			v-if="showDescription"
+			slot="description"
+			:editable="canFullModerate"
+			:description="description"
+			:editing="isEditingDescription"
+			:loading="isDescriptionLoading"
+			:placeholder="t('spreed', 'Add a description for this conversation')"
+			@submit:description="handleUpdateDescription"
+			@update:editing="handleEditDescription" />
 		<AppSidebarTab
 			v-if="showChatInSidebar"
 			id="chat"
@@ -90,6 +100,9 @@ import ParticipantsTab from './Participants/ParticipantsTab'
 import MatterbridgeSettings from './Matterbridge/MatterbridgeSettings'
 import isInLobby from '../../mixins/isInLobby'
 import SetGuestUsername from '../SetGuestUsername'
+import Description from './Description/Description'
+import { setConversationDescription } from '../../services/conversationsService'
+import { EventBus } from '../../services/EventBus'
 
 export default {
 	name: 'RightSidebar',
@@ -101,6 +114,7 @@ export default {
 		ParticipantsTab,
 		SetGuestUsername,
 		MatterbridgeSettings,
+		Description,
 	},
 
 	mixins: [
@@ -120,9 +134,12 @@ export default {
 			contactsLoading: false,
 			// The conversation name (while editing)
 			conversationName: '',
+			isEditingDescription: false,
+			isDescriptionLoading: false,
 			// Sidebar status before starting editing operation
 			sidebarOpenBeforeEditingName: '',
 			matterbridgeEnabled: loadState('talk', 'enable_matterbridge'),
+
 		}
 	},
 
@@ -199,6 +216,14 @@ export default {
 		isRenamingConversation() {
 			return this.$store.getters.isRenamingConversation
 		},
+
+		description() {
+			return this.conversation.description
+		},
+
+		showDescription() {
+			return this.conversation.type !== CONVERSATION.TYPE.ONE_TO_ONE
+		},
 	},
 
 	watch: {
@@ -207,6 +232,14 @@ export default {
 				this.conversationName = this.conversation.displayName
 			}
 		},
+	},
+
+	mounted() {
+		EventBus.$on('routeChange', this.handleRouteChange)
+	},
+
+	beforeDestroy() {
+		EventBus.$off('routeChange', this.handleRouteChange)
 	},
 
 	methods: {
@@ -254,6 +287,30 @@ export default {
 			emit('show-settings')
 		},
 
+		async handleUpdateDescription(description) {
+			this.isDescriptionLoading = true
+			const response = await setConversationDescription(this.token, description)
+			console.debug('response', response)
+			if (response) {
+				// If successful, immediately update the description in the store
+				this.$store.dispatch('setConversationDescription', {
+					token: this.token,
+					description,
+				})
+			}
+			this.isEditingDescription = false
+			this.isDescriptionLoading = false
+		},
+
+		handleEditDescription(payload) {
+			this.isEditingDescription = payload
+		},
+
+		handleRouteChange() {
+			// Reset description data on route change
+			this.isEditingDescription = false
+			this.isDescriptionLoading = false
+		},
 	},
 }
 </script>
