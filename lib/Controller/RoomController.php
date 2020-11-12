@@ -193,10 +193,13 @@ class RoomController extends AEnvironmentAwareController {
 
 		$rooms = $this->manager->getRoomsForUser($this->userId, true);
 
+		$isSIPBridgeRequest = false;
+		$isFullRoomListRequest = true;
+
 		$return = [];
 		foreach ($rooms as $room) {
 			try {
-				$return[] = $this->formatRoom($room, $room->getParticipant($this->userId));
+				$return[] = $this->formatRoom($room, $room->getParticipant($this->userId), $isSIPBridgeRequest, $isFullRoomListRequest);
 			} catch (RoomNotFoundException $e) {
 			} catch (\RuntimeException $e) {
 			}
@@ -288,12 +291,13 @@ class RoomController extends AEnvironmentAwareController {
 	 * @param Room $room
 	 * @param Participant|null $currentParticipant
 	 * @param bool $isSIPBridgeRequest
+	 * @param bool $isFullRoomListRequest
 	 * @return array
 	 * @throws RoomNotFoundException
 	 */
-	protected function formatRoom(Room $room, ?Participant $currentParticipant, bool $isSIPBridgeRequest = false): array {
+	protected function formatRoom(Room $room, ?Participant $currentParticipant, bool $isSIPBridgeRequest = false, bool $isFullRoomListRequest = false): array {
 		if ($this->getAPIVersion() !== 1) {
-			return $this->formatRoomV2andV3($room, $currentParticipant, $isSIPBridgeRequest);
+			return $this->formatRoomV2andV3($room, $currentParticipant, $isSIPBridgeRequest, $isFullRoomListRequest);
 		}
 
 		return $this->formatRoomV1($room, $currentParticipant);
@@ -500,10 +504,11 @@ class RoomController extends AEnvironmentAwareController {
 	 * @param Room $room
 	 * @param Participant|null $currentParticipant
 	 * @param bool $isSIPBridgeRequest
+	 * @param bool $isFullRoomListRequest
 	 * @return array
 	 * @throws RoomNotFoundException
 	 */
-	protected function formatRoomV2andV3(Room $room, ?Participant $currentParticipant, bool $isSIPBridgeRequest = false): array {
+	protected function formatRoomV2andV3(Room $room, ?Participant $currentParticipant, bool $isSIPBridgeRequest = false, bool $isFullRoomListRequest = false): array {
 		$roomData = [
 			'id' => $room->getId(),
 			'token' => $room->getToken(),
@@ -539,6 +544,7 @@ class RoomController extends AEnvironmentAwareController {
 				'actorType' => '',
 				'actorId' => '',
 				'attendeeId' => 0,
+				'description' => '',
 			]);
 		}
 
@@ -598,6 +604,7 @@ class RoomController extends AEnvironmentAwareController {
 				'actorType' => $attendee->getActorType(),
 				'actorId' => $attendee->getActorId(),
 				'attendeeId' => $attendee->getId(),
+				'description' => ($isFullRoomListRequest && !empty($room->getDescription())) ? sha1($room->getDescription()) : $room->getDescription(),
 			]);
 		}
 
