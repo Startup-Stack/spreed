@@ -188,6 +188,9 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 			if (isset($expectedRoom['name'])) {
 				$data['name'] = $room['name'];
 			}
+			if (isset($expectedRoom['description'])) {
+				$data['description'] = $room['description'];
+			}
 			if (isset($expectedRoom['type'])) {
 				$data['type'] = (string) $room['type'];
 			}
@@ -579,6 +582,24 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 		$this->sendRequest(
 			'PUT', '/apps/spreed/api/v1/room/' . self::$identifierToToken[$identifier],
 			new TableNode([['roomName', $newName]])
+		);
+		$this->assertStatusCode($this->response, $statusCode);
+	}
+
+	/**
+	 * @When /^user "([^"]*)" sets description for room "([^"]*)" to "([^"]*)" with (\d+)$/
+	 *
+	 * @param string $user
+	 * @param string $identifier
+	 * @param string $description
+	 * @param string $statusCode
+	 * @param TableNode
+	 */
+	public function userSetsDescriptionForRoomTo($user, $identifier, $description, $statusCode) {
+		$this->setCurrentUser($user);
+		$this->sendRequest(
+			'PUT', '/apps/spreed/api/v3/room/' . self::$identifierToToken[$identifier] . '/description',
+			new TableNode([['description', $description]])
 		);
 		$this->assertStatusCode($this->response, $statusCode);
 	}
