@@ -158,7 +158,7 @@ class BackendNotifier {
 				// TODO(fancycode): We should try to get rid of 'alluserids' and
 				// find a better way to notify existing users to update the room.
 				'alluserids' => $this->participantService->getParticipantUserIds($room),
-				'properties' => $room->getPropertiesForSignaling(''),
+				'properties' => $room->getPropertiesForSignaling('', false),
 			],
 		]);
 	}
@@ -179,7 +179,7 @@ class BackendNotifier {
 				// TODO(fancycode): We should try to get rid of 'alluserids' and
 				// find a better way to notify existing users to update the room.
 				'alluserids' => $this->participantService->getParticipantUserIds($room),
-				'properties' => $room->getPropertiesForSignaling(''),
+				'properties' => $room->getPropertiesForSignaling('', false),
 			],
 		]);
 	}
@@ -200,7 +200,7 @@ class BackendNotifier {
 				// TODO(fancycode): We should try to get rid of 'alluserids' and
 				// find a better way to notify existing users to update the room.
 				'alluserids' => $this->participantService->getParticipantUserIds($room),
-				'properties' => $room->getPropertiesForSignaling(''),
+				'properties' => $room->getPropertiesForSignaling('', false),
 			],
 		]);
 	}
