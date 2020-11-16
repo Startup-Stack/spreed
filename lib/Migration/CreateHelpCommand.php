@@ -50,7 +50,7 @@ class CreateHelpCommand implements IRepairStep {
 				'',
 				'help',
 				'talk',
-				'',
+				'help',
 				Command::RESPONSE_USER,
 				Command::ENABLED_ALL
 			);

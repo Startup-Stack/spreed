@@ -141,7 +141,7 @@ class CommandService {
 				} catch (DoesNotExistException $e) {
 					throw new \InvalidArgumentException('script', 3);
 				}
-			} else {
+			} elseif ($script !== 'help') {
 				if (preg_match('/[`\'"]{(?:ARGUMENTS|ROOM|USER)}[`\'"]/i', $script)) {
 					throw new \InvalidArgumentException('script-parameters', 6);
 				}
