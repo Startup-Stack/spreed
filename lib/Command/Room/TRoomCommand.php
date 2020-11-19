@@ -105,6 +105,38 @@ trait TRoomCommand {
 	}
 
 	/**
+	 * @param Room   $room
+	 * @param string $description
+	 *
+	 * @throws InvalidArgumentException
+	 */
+	protected function setRoomDescription(Room $room, string $description): void {
+		$description = trim($description);
+		if ($description === $room->getDescription()) {
+			return;
+		}
+
+		if (!$this->validateRoomDescription($description)) {
+			throw new InvalidArgumentException('Invalid room description.');
+		}
+
+		if (!$room->setDescription($description)) {
+			throw new InvalidArgumentException('Unable to change room description.');
+		}
+	}
+
+	/**
+	 * @param string $description
+	 *
+	 * @return bool
+	 *
+	 * @throws InvalidArgumentException
+	 */
+	protected function validateRoomDescription(string $description): bool {
+		return mb_strlen($description) <= Room::DESCRIPTION_MAXIMUM_LENGTH;
+	}
+
+	/**
 	 * @param Room $room
 	 * @param bool $public
 	 *
