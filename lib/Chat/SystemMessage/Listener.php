@@ -125,7 +125,7 @@ class Listener {
 		$dispatcher->addListener(Room::EVENT_AFTER_DESCRIPTION_SET, static function (ModifyRoomEvent $event) {
 			$room = $event->getRoom();
 			/** @var self $listener */
-			$listener = \OC::$server->query(self::class);
+			$listener = \OC::$server->get(self::class);
 
 			if ($event->getNewValue() !== '') {
 				$listener->sendSystemMessage($room, 'description_set', [
