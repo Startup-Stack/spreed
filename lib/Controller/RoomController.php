@@ -985,13 +985,11 @@ class RoomController extends AEnvironmentAwareController {
 			return new DataResponse([], Http::STATUS_BAD_REQUEST);
 		}
 
-		if (mb_strlen($description) > Room::DESCRIPTION_MAXIMUM_LENGTH) {
+		try {
+			$this->room->setDescription($description);
+		} catch (\LengthException $exception) {
 			return new DataResponse([], Http::STATUS_BAD_REQUEST);
 		}
-
-		$description = trim($description);
-
-		$this->room->setDescription($description);
 
 		return new DataResponse();
 	}

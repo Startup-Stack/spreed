@@ -520,8 +520,15 @@ class Room {
 	/**
 	 * @param string $description
 	 * @return bool True when the change was valid, false otherwise
+	 * @throws LengthException when the given description is too long
 	 */
 	public function setDescription(string $description): bool {
+		$description = trim($description);
+
+		if (mb_strlen($description) > self::DESCRIPTION_MAXIMUM_LENGTH) {
+			throw new \LengthException('Conversation description is limited to ' . self::DESCRIPTION_MAXIMUM_LENGTH . ' characters');
+		}
+
 		$oldDescription = $this->getDescription();
 		if ($description === $oldDescription) {
 			return false;
