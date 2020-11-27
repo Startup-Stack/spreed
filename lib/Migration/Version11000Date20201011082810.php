@@ -52,8 +52,10 @@ class Version11000Date20201011082810 extends SimpleMigrationStep {
 				// the value would require a migration.
 				'length' => 250,
 			]);
+
+			return $schema;
 		}
 
-		return $schema;
+		return null;
 	}
 }
