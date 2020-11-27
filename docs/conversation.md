@@ -29,7 +29,7 @@
         `type` | int | * | See list of conversation types in the [constants list](constants.md#Conversation-types)
         `name` | string | * | Name of the conversation (can also be empty)
         `displayName` | string | * | `name` if non empty, otherwise it falls back to a list of participants
-        'description` | string | v3 | Description of the conversation (can also be empty)
+        `description` | string | v3 | Description of the conversation (can also be empty)
         `participantType` | int | * | Permissions level of the current user
         `attendeeId` | int | v3 | Unique attendee id
         `actorType` | string | v3 | Currently known `users|guests|emails|groups`
@@ -144,7 +144,7 @@
 * Response:
     - Status code:
         + `200 OK`
-        + `400 Bad Request` When the name is too long
+        + `400 Bad Request` When the description is too long
         + `400 Bad Request` When the conversation is a one to one conversation
         + `403 Forbidden` When the current user is not a moderator/owner
         + `404 Not Found` When the conversation could not be found for the participant
