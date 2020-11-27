@@ -54,7 +54,7 @@ Feature: create
 
 
 
-  Scenario: Create a room public room for participant1 as owner with a description of 200 characters
+  Scenario: Create a public room for participant1 as owner with a description of 200 characters
     When invoking occ with "talk:room:create room1 --user participant1 --owner participant1 --public --description 012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678C012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678C0123456789012345678901234567890123456789012345678L"
     Then the command was successful
     And the command output contains the text "Room successfully created"
@@ -62,12 +62,12 @@ Feature: create
       | name  | type | participantType | description |
       | room1 | 3    | 1               | 012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678C012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678C0123456789012345678901234567890123456789012345678L |
 
-  Scenario: Create a room public room for participant1 as owner with a description of more than 200 characters
+  Scenario: Create a public room for participant1 as owner with a description of more than 200 characters
     When invoking occ with "talk:room:create room1 --user participant1 --owner participant1 --public --description 012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678C012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678C0123456789012345678901234567890123456789012345678L1"
     Then the command failed with exit code 1
     And the command output contains the text "Invalid room description"
 
-  Scenario: Create a room public room for participant1 as owner with a description of 200 multibyte characters
+  Scenario: Create a public room for participant1 as owner with a description of 200 multibyte characters
     When invoking occ with "talk:room:create room1 --user participant1 --owner participant1 --public --description ०१२३४५६७८९०१२३४५६७८९०१२३४५६७८९०१२३४५६७८९०१२३४५६७८९०१२३४५६७८९०१२३४५६७८९०१२३४५६७८९०१२३४५६७८९०१२३४५६७८च०१२३४५६७८९०१२३४५६७८९०१२३४५६७८९०१२३४५६७८९०१२३४५६७८९०१२३४५६७८९०१२३४५६७८९०१२३४५६७८९०१२३४५६७८९०१२३४५६७८च०१२३४५६७८९०१२३४५६७८९०१२३४५६७८९०१२३४५६७८९०१२३४५६७८ल"
     Then the command was successful
     And the command output contains the text "Room successfully created"
@@ -75,7 +75,7 @@ Feature: create
       | name  | type | participantType | description |
       | room1 | 3    | 1               | ०१२३४५६७८९०१२३४५६७८९०१२३४५६७८९०१२३४५६७८९०१२३४५६७८९०१२३४५६७८९०१२३४५६७८९०१२३४५६७८९०१२३४५६७८९०१२३४५६७८च०१२३४५६७८९०१२३४५६७८९०१२३४५६७८९०१२३४५६७८९०१२३४५६७८९०१२३४५६७८९०१२३४५६७८९०१२३४५६७८९०१२३४५६७८९०१२३४५६७८च०१२३४५६७८९०१२३४५६७८९०१२३४५६७८९०१२३४५६७८९०१२३४५६७८ल |
 
-  Scenario: Create a room public room for participant1 as owner with a description of more than 200 multibyte characters
+  Scenario: Create a public room for participant1 as owner with a description of more than 200 multibyte characters
     When invoking occ with "talk:room:create room1 --user participant1 --owner participant1 --public --description ०१२३४५६७८९०१२३४५६७८९०१२३४५६७८९०१२३४५६७८९०१२३४५६७८९०१२३४५६७८९०१२३४५६७८९०१२३४५६७८९०१२३४५६७८९०१२३४५६७८च०१२३४५६७८९०१२३४५६७८९०१२३४५६७८९०१२३४५६७८९०१२३४५६७८९०१२३४५६७८९०१२३४५६७८९०१२३४५६७८९०१२३४५६७८९०१२३४५६७८च०१२३४५६७८९०१२३४५६७८९०१२३४५६७८९०१२३४५६७८९०१२३४५६७८ल०"
     Then the command failed with exit code 1
     And the command output contains the text "Invalid room description"
