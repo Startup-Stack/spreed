@@ -34,13 +34,6 @@ use OCP\IDBConnection;
 
 class Version11000Date20201011082810 extends SimpleMigrationStep {
 
-	/** @var IDBConnection */
-	protected $connection;
-
-	public function __construct(IDBConnection $connection) {
-		$this->connection = $connection;
-	}
-
 	/**
 	 * @param IOutput $output
 	 * @param Closure $schemaClosure The `\Closure` returns a `ISchemaWrapper`
