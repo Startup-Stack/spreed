@@ -46,11 +46,9 @@ class Version11000Date20201011082810 extends SimpleMigrationStep {
 
 		$table = $schema->getTable('talk_rooms');
 		if (!$table->hasColumn('description')) {
-			$table->addColumn('description', Type::STRING, [
+			$table->addColumn('description', Type::TEXT, [
 				'notnull' => false,
-				// Room::DESCRIPTION_MAXIMUM_LENGTH is not used as changes to
-				// the value would require a migration.
-				'length' => 250,
+				'default' => '',
 			]);
 
 			return $schema;
