@@ -174,6 +174,10 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 			if (isset($expectedRoom['participantType'])) {
 				$data['participantType'] = (string) $room['participantType'];
 			}
+			if (isset($expectedRoom['participantType'])) {
+
+				$data['participantType'] = (string) $room['participantType'];
+			}
 			if (isset($expectedRoom['participants'])) {
 				$participantNames = array_map(function ($participant) {
 					return $participant['name'];
@@ -199,6 +203,12 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 					$participantNames[$lastParticipantKey] .= ' [exact order]';
 				}
 				$data['participants'] = implode(', ', $participantNames);
+			}
+			if (isset($expectedRoom['sipEnabled'])) {
+				$data['sipEnabled'] = (string) $room['sipEnabled'];
+			}
+			if (isset($expectedRoom['attendeePin'])) {
+				$data['attendeePin'] = $room['attendeePin'] ? '**PIN**' : '';
 			}
 
 			return $data;
@@ -254,6 +264,59 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 		}
 
 		Assert::assertEquals($isParticipant, false, 'Room ' . $identifier . ' not found in user´s room list');
+	}
+
+	/**
+	 * @Then /^user "([^"]*)" sees the following attendees in room "([^"]*)" with (\d+)(?: \((v(1|2|3))\))?$/
+	 *
+	 * @param string $user
+	 * @param string $identifier
+	 * @param string $statusCode
+	 * @param string $apiVersion
+	 * @param TableNode $formData
+	 */
+	public function userSeesAttendeesInRoom($user, $identifier, $statusCode, $apiVersion = 'v1', TableNode $formData = null) {
+		$this->setCurrentUser($user);
+		$this->sendRequest('GET', '/apps/spreed/api/' . $apiVersion . '/room/' . self::$identifierToToken[$identifier] . '/participants');
+		$this->assertStatusCode($this->response, $statusCode);
+
+		if ($formData instanceof TableNode) {
+			$attendees = $this->getDataFromResponse($this->response);
+			$expectedKeys = array_flip($formData->getRows()[0]);
+
+			$result = [];
+			foreach ($attendees as $attendee) {
+				$data = [];
+				if (isset($expectedKeys['actorType'])) {
+					$data['actorType'] = $attendee['actorType'];
+				}
+				if (isset($expectedKeys['actorId'])) {
+					$data['actorId'] = $attendee['actorId'];
+				}
+				if (isset($expectedKeys['participantType'])) {
+					$data['participantType'] = (string) $attendee['participantType'];
+				}
+				if (isset($expectedKeys['inCall'])) {
+					$data['inCall'] = (string) $attendee['inCall'];
+				}
+				if (isset($expectedKeys['attendeePin'])) {
+					$data['attendeePin'] = $attendee['attendeePin'] ? '**PIN**' : '';
+				}
+
+				$result[] = $data;
+			}
+
+			$expected = array_map(function($attendee) {
+				if (isset($attendee['actorId']) && substr($attendee['actorId'], 0, strlen('"guest')) === '"guest') {
+					$attendee['actorId'] = sha1(self::$userToSessionId[trim($attendee['actorId'], '"')]);
+				}
+				return $attendee;
+			}, $formData->getHash());
+
+			Assert::assertEquals($result, $expected);
+		} else {
+			Assert::assertNull($formData);
+		}
 	}
 
 	/**
@@ -624,13 +687,38 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 			$lobbyState = 1;
 		} else {
 			Assert::fail('Invalid lobby state');
-			return;
 		}
 
 		$this->setCurrentUser($user);
 		$this->sendRequest(
-			'PUT', '/apps/spreed/api/' . $apiVersion . '/room/' . self::$identifierToToken[$identifier] . '/webinary/lobby',
+			'PUT', '/apps/spreed/api/' . $apiVersion . '/room/' . self::$identifierToToken[$identifier] . '/webinar/lobby',
 			new TableNode([['state', $lobbyState]])
+		);
+		$this->assertStatusCode($this->response, $statusCode);
+	}
+
+	/**
+	 * @When /^user "([^"]*)" sets SIP state for room "([^"]*)" to "([^"]*)" with (\d+)(?: \((v(1|2|3))\))?$/
+	 *
+	 * @param string $user
+	 * @param string $identifier
+	 * @param string $SIPStateString
+	 * @param string $statusCode
+	 * @param string $apiVersion
+	 */
+	public function userSetsSIPStateForRoomTo($user, $identifier, $SIPStateString, $statusCode, $apiVersion = 'v1') {
+		if ($SIPStateString === 'disabled') {
+			$SIPState = 0;
+		} elseif ($SIPStateString === 'enabled') {
+			$SIPState = 1;
+		} else {
+			Assert::fail('Invalid SIP state');
+		}
+
+		$this->setCurrentUser($user);
+		$this->sendRequest(
+			'PUT', '/apps/spreed/api/' . $apiVersion . '/room/' . self::$identifierToToken[$identifier] . '/webinar/sip',
+			new TableNode([['state', $SIPState]])
 		);
 		$this->assertStatusCode($this->response, $statusCode);
 	}
@@ -685,6 +773,29 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 		$this->sendRequest(
 			'POST', '/apps/spreed/api/' . $apiVersion . '/room/' . self::$identifierToToken[$identifier] . '/participants',
 			new TableNode([['newParticipant', $newUser]])
+		);
+		$this->assertStatusCode($this->response, $statusCode);
+	}
+
+	/**
+	 * @Then /^user "([^"]*)" adds (user|group|email|circle) "([^"]*)" to room "([^"]*)" with (\d+)(?: \((v(1|2|3))\))?$/
+	 *
+	 * @param string $user
+	 * @param string $newType
+	 * @param string $newId
+	 * @param string $identifier
+	 * @param string $statusCode
+	 * @param string $apiVersion
+	 */
+	public function userAddAttendeeToRoom($user, $newType, $newId, $identifier, $statusCode, $apiVersion = 'v1') {
+		var_dump($newType);
+		$this->setCurrentUser($user);
+		$this->sendRequest(
+			'POST', '/apps/spreed/api/' . $apiVersion . '/room/' . self::$identifierToToken[$identifier] . '/participants',
+			new TableNode([
+				['source', $newType . 's'],
+				['newParticipant', $newId],
+			])
 		);
 		$this->assertStatusCode($this->response, $statusCode);
 	}
