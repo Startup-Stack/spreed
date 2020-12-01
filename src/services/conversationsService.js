@@ -331,7 +331,7 @@ const changeReadOnlyState = async function(token, readOnly) {
  */
 const changeListable = async function(token, listable) {
 	try {
-		const response = await axios.put(generateOcsUrl('apps/spreed/api/v2', 2) + `room/${token}/listable`, {
+		const response = await axios.put(generateOcsUrl('apps/spreed/api/v3', 2) + `room/${token}/listable`, {
 			state: listable,
 		})
 		return response

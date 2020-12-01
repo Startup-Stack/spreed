@@ -250,7 +250,7 @@ return [
 			'url' => '/api/{apiVersion}/room/{token}/listable',
 			'verb' => 'PUT',
 			'requirements' => [
-				'apiVersion' => 'v(1|2|3)',
+				'apiVersion' => 'v3',
 				'token' => '^[a-z0-9]{4,30}$',
 			],
 		],
