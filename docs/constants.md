@@ -12,6 +12,12 @@ title: Constants
 * `0` read-write
 * `1` read-only
 
+## Listable flags
+* `0` joined users only
+* `1` regular users
+* `2` guest users from guest app
+* `3` both regular and guest users
+
 ## Participant types
 * `1` owner
 * `2` moderator

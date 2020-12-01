@@ -252,6 +252,7 @@ class BackendNotifierTest extends \Test\TestCase {
 					'lobby-state' => Webinary::LOBBY_NONE,
 					'lobby-timer' => null,
 					'read-only' => Room::READ_WRITE,
+					'listable' => Room::LISTABLE_JOINED_ONLY,
 					'active-since' => null,
 					'sip-enabled' => 0,
 				],
@@ -287,6 +288,7 @@ class BackendNotifierTest extends \Test\TestCase {
 					'lobby-state' => Webinary::LOBBY_NONE,
 					'lobby-timer' => null,
 					'read-only' => Room::READ_WRITE,
+					'listable' => Room::LISTABLE_JOINED_ONLY,
 					'active-since' => null,
 					'sip-enabled' => 0,
 				],
@@ -309,6 +311,7 @@ class BackendNotifierTest extends \Test\TestCase {
 					'lobby-state' => Webinary::LOBBY_NONE,
 					'lobby-timer' => null,
 					'read-only' => Room::READ_WRITE,
+					'listable' => Room::LISTABLE_JOINED_ONLY,
 					'active-since' => null,
 					'sip-enabled' => 0,
 				],
@@ -331,6 +334,7 @@ class BackendNotifierTest extends \Test\TestCase {
 					'lobby-state' => Webinary::LOBBY_NONE,
 					'lobby-timer' => null,
 					'read-only' => Room::READ_WRITE,
+					'listable' => Room::LISTABLE_JOINED_ONLY,
 					'active-since' => null,
 					'sip-enabled' => 0,
 				],
@@ -353,6 +357,7 @@ class BackendNotifierTest extends \Test\TestCase {
 					'lobby-state' => Webinary::LOBBY_NONE,
 					'lobby-timer' => null,
 					'read-only' => Room::READ_WRITE,
+					'listable' => Room::LISTABLE_JOINED_ONLY,
 					'active-since' => null,
 					'sip-enabled' => 0,
 				],
@@ -375,6 +380,30 @@ class BackendNotifierTest extends \Test\TestCase {
 					'lobby-state' => Webinary::LOBBY_NONE,
 					'lobby-timer' => null,
 					'read-only' => Room::READ_ONLY,
+					'listable' => Room::LISTABLE_JOINED_ONLY,
+					'active-since' => null,
+					'sip-enabled' => 0,
+				],
+			],
+		]);
+	}
+
+	public function testRoomListableChanged() {
+		$room = $this->manager->createRoom(Room::PUBLIC_CALL);
+		$room->setListable(Room::LISTABLE_GUEST_USERS);
+
+		$this->assertMessageWasSent($room, [
+			'type' => 'update',
+			'update' => [
+				'userids' => [
+				],
+				'properties' => [
+					'name' => $room->getDisplayName(''),
+					'type' => $room->getType(),
+					'lobby-state' => Webinary::LOBBY_NONE,
+					'lobby-timer' => null,
+					'read-only' => Room::READ_WRITE,
+					'listable' => Room::LISTABLE_GUEST_USERS,
 					'active-since' => null,
 					'sip-enabled' => 0,
 				],
@@ -397,6 +426,7 @@ class BackendNotifierTest extends \Test\TestCase {
 					'lobby-state' => Webinary::LOBBY_NON_MODERATORS,
 					'lobby-timer' => null,
 					'read-only' => Room::READ_WRITE,
+					'listable' => Room::LISTABLE_JOINED_ONLY,
 					'active-since' => null,
 					'sip-enabled' => 0,
 				],
@@ -555,6 +585,7 @@ class BackendNotifierTest extends \Test\TestCase {
 					'lobby-state' => Webinary::LOBBY_NONE,
 					'lobby-timer' => null,
 					'read-only' => Room::READ_WRITE,
+					'listable' => Room::LISTABLE_JOINED_ONLY,
 					'active-since' => null,
 					'sip-enabled' => 0,
 					'foo' => 'bar',

@@ -151,6 +151,34 @@ class SystemMessage {
 			} elseif ($cliIsActor) {
 				$parsedMessage = $this->l->t('An administrator locked the conversation');
 			}
+		} elseif ($message === 'listable_joined_only') {
+			$parsedMessage = $this->l->t('{actor} made the conversation listable only for joined users');
+			if ($currentUserIsActor) {
+				$parsedMessage = $this->l->t('You made the conversation listable only for joined users');
+			} elseif ($cliIsActor) {
+				$parsedMessage = $this->l->t('An administrator made the conversation listable only for joined users');
+			}
+		} elseif ($message === 'listable_regular_users') {
+			$parsedMessage = $this->l->t('{actor} made the conversation listable for regular users');
+			if ($currentUserIsActor) {
+				$parsedMessage = $this->l->t('You made the conversation listable for regular users');
+			} elseif ($cliIsActor) {
+				$parsedMessage = $this->l->t('An administrator made the conversation listable for regular users');
+			}
+		} elseif ($message === 'listable_guest_users') {
+			$parsedMessage = $this->l->t('{actor} made the conversation listable for guest users');
+			if ($currentUserIsActor) {
+				$parsedMessage = $this->l->t('You made the conversation listable for guest users');
+			} elseif ($cliIsActor) {
+				$parsedMessage = $this->l->t('An administrator made the conversation listable for guest users');
+			}
+		} elseif ($message === 'listable_all') {
+			$parsedMessage = $this->l->t('{actor} made the conversation listable for all users');
+			if ($currentUserIsActor) {
+				$parsedMessage = $this->l->t('You made the conversation listable for all users');
+			} elseif ($cliIsActor) {
+				$parsedMessage = $this->l->t('An administrator made the conversation listable for all users');
+			}
 		} elseif ($message === 'lobby_timer_reached') {
 			$parsedMessage = $this->l->t('The conversation is now open to everyone');
 		} elseif ($message === 'lobby_none') {

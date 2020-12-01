@@ -324,6 +324,22 @@ const changeReadOnlyState = async function(token, readOnly) {
 	}
 }
 
+/**
+ * Change the listable flags
+ * @param {string} token The token of the conversation to be modified
+ * @param {int} listable The new listable flags to set
+ */
+const changeListable = async function(token, listable) {
+	try {
+		const response = await axios.put(generateOcsUrl('apps/spreed/api/v2', 2) + `room/${token}/listable`, {
+			state: listable,
+		})
+		return response
+	} catch (error) {
+		console.debug('Error while updating listable flags: ', error)
+	}
+}
+
 export {
 	fetchConversations,
 	fetchConversation,
@@ -341,6 +357,7 @@ export {
 	setSIPEnabled,
 	changeLobbyState,
 	changeReadOnlyState,
+	changeListable,
 	setConversationPassword,
 	setConversationName,
 }

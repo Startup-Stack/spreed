@@ -522,6 +522,7 @@ class RoomController extends AEnvironmentAwareController {
 			'participantType' => Participant::GUEST,
 			'participantFlags' => Participant::FLAG_DISCONNECTED,
 			'readOnly' => Room::READ_WRITE,
+			'listable' => $room->getListable(),
 			'hasPassword' => $room->hasPassword(),
 			'hasCall' => false,
 			'canStartCall' => false,
@@ -594,6 +595,7 @@ class RoomController extends AEnvironmentAwareController {
 			'objectId' => $room->getObjectId(),
 			'participantType' => $attendee->getParticipantType(),
 			'readOnly' => $room->getReadOnly(),
+			'listable' => $room->getListable(),
 			'hasCall' => $room->getActiveSince() instanceof \DateTimeInterface,
 			'lastActivity' => $lastActivity,
 			'isFavorite' => $attendee->isFavorite(),
@@ -1422,6 +1424,21 @@ class RoomController extends AEnvironmentAwareController {
 	 */
 	public function setReadOnly(int $state): DataResponse {
 		if (!$this->room->setReadOnly($state)) {
+			return new DataResponse([], Http::STATUS_BAD_REQUEST);
+		}
+
+		return new DataResponse();
+	}
+
+	/**
+	 * @NoAdminRequired
+	 * @RequireModeratorParticipant
+	 *
+	 * @param int $state
+	 * @return DataResponse
+	 */
+	public function setListable(int $state): DataResponse {
+		if (!$this->room->setListable($state)) {
 			return new DataResponse([], Http::STATUS_BAD_REQUEST);
 		}
 

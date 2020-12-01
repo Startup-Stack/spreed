@@ -22,6 +22,38 @@
 <template>
 	<div>
 		<div class="app-settings-subsection">
+			<div id="moderation_settings_listable_users_hint" class="app-settings-section__hint">
+				{{ t('spreed', 'Allow regular users to find this conversation when not joined') }}
+			</div>
+			<div>
+				<input id="moderation_settings_listable_users_conversation_checkbox"
+					aria-describedby="moderation_settings_listable_users_conversation_hint"
+					type="checkbox"
+					class="checkbox"
+					name="moderation_settings_listable_users_conversation_checkbox"
+					:checked="isListableForRegularUsers"
+					:disabled="isListableLoading"
+					@change="toggleUserListable">
+				<label for="moderation_settings_listable_users_conversation_checkbox">{{ t('spreed', 'Listable for regular users') }}</label>
+			</div>
+			<template v-if="isGuestAppEnabled">
+				<div id="moderation_settings_listable_guests_hint" class="app-settings-section__hint">
+					{{ t('spreed', 'Allow guest users from the guest app to find this conversation when not joined') }}
+				</div>
+				<div>
+					<input id="moderation_settings_listable_guests_conversation_checkbox"
+						aria-describedby="moderation_settings_listable_guests_conversation_hint"
+						type="checkbox"
+						class="checkbox"
+						name="moderation_settings_listable_guests_conversation_checkbox"
+						:checked="isListableForGuestUsers"
+						:disabled="isListableLoading"
+						@change="toggleGuestListable">
+					<label for="moderation_settings_listable_guests_conversation_checkbox">{{ t('spreed', 'Listable for guest users (guest app)') }}</label>
+				</div>
+			</template>
+		</div>
+		<div class="app-settings-subsection">
 			<div id="moderation_settings_lock_conversation_hint" class="app-settings-section__hint">
 				{{ t('spreed', 'Locking the conversation prevents anyone to post messages or start calls.') }}
 			</div>
@@ -107,6 +139,7 @@ export default {
 	data() {
 		return {
 			isReadOnlyStateLoading: false,
+			isListableLoading: false,
 			isLobbyStateLoading: false,
 			isLobbyTimerLoading: false,
 			newLobbyTimer: null,
@@ -114,6 +147,11 @@ export default {
 	},
 
 	computed: {
+		isGuestAppEnabled() {
+			// TODO: detect guest app
+			return true
+		},
+
 		canUserEnableSIP() {
 			return this.conversation.canEnableSIP
 		},
@@ -128,6 +166,14 @@ export default {
 
 		isReadOnly() {
 			return this.conversation.readOnly === CONVERSATION.STATE.READ_ONLY
+		},
+
+		isListableForRegularUsers() {
+			return (this.conversation.listable & CONVERSATION.LISTABLE.REGULAR_USERS) > 0
+		},
+
+		isListableForGuestUsers() {
+			return (this.conversation.listable & CONVERSATION.LISTABLE.GUEST_USERS) > 0
 		},
 
 		hasLobbyEnabled() {
@@ -193,6 +239,33 @@ export default {
 				}
 			}
 			this.isReadOnlyStateLoading = false
+		},
+
+		async toggleUserListable() {
+			// flip the matching bit
+			const listable = this.conversation.listable ^ CONVERSATION.LISTABLE.REGULAR_USERS
+			await this.setListable(listable)
+		},
+
+		async toggleGuestListable() {
+			// flip the matching bit
+			const listable = this.conversation.listable ^ CONVERSATION.LISTABLE.GUEST_USERS
+			await this.setListable(listable)
+		},
+
+		async setListable(listable) {
+			this.isListableLoading = true
+			try {
+				await this.$store.dispatch('setListable', {
+					token: this.token,
+					listable: listable,
+				})
+				showSuccess(t('spreed', 'You updated the listable state'))
+			} catch (e) {
+				console.error('Error occurred when updating the listable state', e)
+				showError(t('spreed', 'Error occurred when updating the listable state'))
+			}
+			this.isListableLoading = false
 		},
 
 		async toggleLobby() {

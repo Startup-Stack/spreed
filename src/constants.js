@@ -34,6 +34,12 @@ export const CONVERSATION = {
 		READ_WRITE: 0,
 		READ_ONLY: 1,
 	},
+	LISTABLE: {
+		JOINED_ONLY: 0,
+		REGULAR_USERS: 1,
+		GUEST_USERS: 2,
+		ALL: 3,
+	},
 	TYPE: {
 		ONE_TO_ONE: 1,
 		GROUP: 2,
