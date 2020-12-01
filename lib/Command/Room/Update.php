@@ -65,7 +65,7 @@ class Update extends Base {
 				'listable',
 				null,
 				InputOption::VALUE_NONE,
-				'Modifies the room\'s listable flags'
+				'Modifies the room\'s listable scope'
 			)->addOption(
 				'password',
 				null,

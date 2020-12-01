@@ -69,7 +69,7 @@ class Create extends Base {
 				'listable',
 				null,
 				InputOption::VALUE_NONE,
-				'Creates the room with the given listable flags'
+				'Creates the room with the given listable scope'
 			)->addOption(
 				'password',
 				null,

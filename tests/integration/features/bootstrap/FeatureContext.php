@@ -677,7 +677,7 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	}
 
 	/**
-	 * @Then /^user "([^"]*)" allows listing room "([^"]*)" for "(joined|users|guests|all)" with (\d+)(?: \((v(1|2|3))\))?$/
+	 * @Then /^user "([^"]*)" allows listing room "([^"]*)" for "(joined|users|all)" with (\d+)(?: \((v(1|2|3))\))?$/
 	 *
 	 * @param string $user
 	 * @param string $newState
@@ -685,14 +685,12 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	 * @param string $statusCode
 	 * @param string $apiVersion
 	 */
-	public function userChangesListableFlagsOfTheRoom($user, $identifier, $newState, $statusCode, $apiVersion = 'v3') {
+	public function userChangesListableScopeOfTheRoom($user, $identifier, $newState, $statusCode, $apiVersion = 'v3') {
 		$this->setCurrentUser($user);
 		if ($newState === 'joined') {
-			$newStateValue = Room::LISTABLE_JOINED_ONLY;
+			$newStateValue = Room::LISTABLE_PARTICIPANTS;
 		} elseif ($newState === 'users') {
-			$newStateValue = Room::LISTABLE_REGULAR_USERS;
-		} elseif ($newState === 'guests') {
-			$newStateValue = Room::LISTABLE_GUEST_USERS;
+			$newStateValue = Room::LISTABLE_USERS;
 		} else {
 			$newStateValue = Room::LISTABLE_ALL;
 		}

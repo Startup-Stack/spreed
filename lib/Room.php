@@ -65,24 +65,17 @@ class Room {
 	/**
 	 * Only visible when joined
 	 */
-	public const LISTABLE_JOINED_ONLY = 0;
+	public const LISTABLE_PARTICIPANTS = 0;
 
 	/**
-	 * Searchable by all regular users, even when not joined
+	 * Searchable by all regular users and moderators, even when not joined, excluding guest users
 	 */
-	public const LISTABLE_REGULAR_USERS = 1;
+	public const LISTABLE_USERS = 1;
 
 	/**
-	 * Searchable by all guest users (from guest app), even when not joined
+	 * Searchable by everyone, which includes guest users (from guest app), even when not joined
 	 */
-	public const LISTABLE_GUEST_USERS = 2;
-
-	/**
-	 * Searchable by all users, even when not joined.
-	 *
-	 * This is the bitmask of LISTABLE_REGULAR_USERS & LISTABLE_GUEST_USERS together.
-	 */
-	public const LISTABLE_ALL = 3;
+	public const LISTABLE_ALL = 2;
 
 	public const START_CALL_EVERYONE = 0;
 	public const START_CALL_USERS = 1;
@@ -763,7 +756,7 @@ class Room {
 	}
 
 	/**
-	 * @param int $newState bit mask of self::LISTABLE_*
+	 * @param int $newState New listable scope from self::LISTABLE_*
 	 * 						Also it's only allowed on rooms of type
 	 * 						`self::GROUP_CALL` and `self::PUBLIC_CALL`
 	 * @return bool True when the change was valid, false otherwise

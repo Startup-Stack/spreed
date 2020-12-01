@@ -173,12 +173,10 @@ class Listener {
 			/** @var self $listener */
 			$listener = \OC::$server->query(self::class);
 
-			if ($event->getNewValue() === Room::LISTABLE_JOINED_ONLY) {
-				$listener->sendSystemMessage($room, 'listable_joined_only');
-			} elseif ($event->getNewValue() === Room::LISTABLE_REGULAR_USERS) {
-				$listener->sendSystemMessage($room, 'listable_regular_users');
-			} elseif ($event->getNewValue() === Room::LISTABLE_GUEST_USERS) {
-				$listener->sendSystemMessage($room, 'listable_guest_users');
+			if ($event->getNewValue() === Room::LISTABLE_PARTICIPANTS) {
+				$listener->sendSystemMessage($room, 'listable_participants');
+			} elseif ($event->getNewValue() === Room::LISTABLE_USERS) {
+				$listener->sendSystemMessage($room, 'listable_users');
 			} elseif ($event->getNewValue() === Room::LISTABLE_ALL) {
 				$listener->sendSystemMessage($room, 'listable_all');
 			}

@@ -35,10 +35,9 @@ export const CONVERSATION = {
 		READ_ONLY: 1,
 	},
 	LISTABLE: {
-		JOINED_ONLY: 0,
-		REGULAR_USERS: 1,
-		GUEST_USERS: 2,
-		ALL: 3,
+		PARTICIPANTS: 0,
+		USERS: 1,
+		ALL: 2,
 	},
 	TYPE: {
 		ONE_TO_ONE: 1,

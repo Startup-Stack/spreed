@@ -30,7 +30,7 @@ use OCP\Migration\IOutput;
 use OCP\Migration\SimpleMigrationStep;
 
 /**
- * Auto-generated migration step: Please modify to your needs!
+ * Add listable column to the rooms table.
  */
 class Version2100Date20201201102528 extends SimpleMigrationStep {
 	/**

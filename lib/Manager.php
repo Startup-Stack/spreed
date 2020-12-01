@@ -704,7 +704,7 @@ class Manager {
 		if ($row === false) {
 			$room = $this->createRoom(Room::CHANGELOG_CONVERSATION, $userId);
 			$room->setReadOnly(Room::READ_ONLY);
-			$room->setListable(Room::LISTABLE_JOINED_ONLY);
+			$room->setListable(Room::LISTABLE_PARTICIPANTS);
 
 			$this->participantService->addUsers($room,[[
 				'actorType' => Attendee::ACTOR_USERS,

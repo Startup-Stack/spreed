@@ -37,7 +37,7 @@
         `participantInCall` | bool | 🏴 v1 | Flag if the current user is in the call (deprecated, use `participantFlags` instead)
         `participantFlags` | int | * | Flags of the current user (only available with `in-call-flags` capability)
         `readOnly` | int | * | Read-only state for the current user (only available with `read-only-rooms` capability)
-        `listable` | int | * | Listable flags for the room (only available with `listable-rooms` capability)
+        `listable` | int | * | Listable scope for the room (only available with `listable-rooms` capability)
         `count` | int | 🏴 v1 | **Deprecated:** ~~Number of active users~~ - always returns `0`
         `numGuests` | int | 🏴 v1 | Number of active guests
         `lastPing` | int | * | Timestamp of the last ping of the current user (should be used for sorting)
@@ -247,7 +247,7 @@
         + `401 Unauthorized` When the participant is a guest
         + `404 Not Found` When the conversation could not be found for the participant
 
-## Set listable flags for a conversation
+## Set listable scope for a conversation
 
 * Method: `PUT`
 * Endpoint: `/room/{token}/listable`
@@ -255,7 +255,7 @@
 
     field | type | Description
     ------|------|------------
-    `state` | int | New flags for the conversation
+    `scope` | int | New flags for the conversation
 
 * Response:
     - Status code:
