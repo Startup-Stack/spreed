@@ -142,11 +142,6 @@ export default {
 	},
 
 	computed: {
-		isGuestAppEnabled() {
-			// TODO: detect guest app
-			return true
-		},
-
 		canUserEnableSIP() {
 			return this.conversation.canEnableSIP
 		},
