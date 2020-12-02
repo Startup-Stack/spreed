@@ -98,7 +98,12 @@ class Update extends Base {
 			return 1;
 		}
 
-		if (!in_array($listable, [null, '0', '1', '2', '3'], true)) {
+		if (!in_array($listable, [
+			null,
+			(string)Room::LISTABLE_NONE,
+			(string)Room::LISTABLE_USERS,
+			(string)Room::LISTABLE_ALL,
+		], true)) {
 			$output->writeln('<error>Invalid value for option "--listable" given.</error>');
 			return 1;
 		}
@@ -158,7 +163,11 @@ class Update extends Base {
 			case 'readonly':
 				return ['1', '0'];
 			case 'listable':
-				return ['2', '1', '0'];
+				return [
+					(string)Room::LISTABLE_ALL,
+					(string)Room::LISTABLE_USERS,
+					(string)Room::LISTABLE_NONE,
+				];
 
 			case 'owner':
 				return $this->completeParticipantValues($context);
