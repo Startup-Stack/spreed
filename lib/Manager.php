@@ -441,8 +441,13 @@ class Manager {
 	}
 
 	/**
-	 * Also returns public rooms for participants that have not been invited,
-	 * so they can join.
+	 * Returns room object for a user by token.
+	 *
+	 * Also returns:
+	 * - public rooms for participants that have not been invited
+	 * - listable rooms for participants that have not been invited
+	 *
+	 * This is useful so they can join.
 	 *
 	 * @param string $token
 	 * @param string|null $userId
@@ -500,8 +505,24 @@ class Manager {
 			return $room;
 		}
 
-		if ($userId !== null && $row['actor_id'] === $userId) {
-			return $room;
+		if ($userId !== null) {
+			// user already joined that room before
+			if ($row['actor_id'] === $userId) {
+				return $room;
+			}
+
+			// never joined before but found in listing
+			$listable = null;
+			if (isset($row['listable'])) {
+				$listable = (int)$row['listable'];
+			}
+			if (
+				$listable === Room::LISTABLE_ALL || (
+					$listable === Room::LISTABLE_USERS && !$this->isGuestUser($userId)
+				)
+			) {
+				return $room;
+			}
 		}
 
 		throw new RoomNotFoundException();
