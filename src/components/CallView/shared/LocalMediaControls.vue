@@ -87,9 +87,8 @@
 				:aria-label="t('spreed', 'Lower hand')"
 				@click="toggleHandRaised">
 				<Hand
-					:size="24"
+					:size="16"
 					title=""
-					fill-color="#ffffff"
 					decorative />
 			</button>
 			<Actions
@@ -102,8 +101,7 @@
 					@click="toggleHandRaised">
 					<Hand
 						slot="icon"
-						:size="24"
-						fill-color="#000000"
+						:size="16"
 						decorative
 						title="" />
 					{{ raiseHandButtonLabel }}
