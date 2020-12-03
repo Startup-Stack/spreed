@@ -89,6 +89,7 @@
 				<Hand
 					:size="24"
 					title=""
+					fill-color="#ffffff"
 					decorative />
 			</button>
 			<Actions
@@ -211,6 +212,7 @@ export default {
 			qualityWarningInGracePeriodTimeout: null,
 			audioEnabledBeforeSpacebarKeydown: undefined,
 			spacebarKeyDown: false,
+			raisingHandNotification: null,
 		}
 	},
 
@@ -554,10 +556,14 @@ export default {
 
 		toggleHandRaised() {
 			const raisedHand = !this.model.attributes.raisedHand
+			if (this.raisingHandNotification) {
+				this.raisingHandNotification.hideToast()
+				this.raisingHandNotification = null
+			}
 			if (raisedHand) {
-				showMessage(t('spreed', 'You are now raising your hand.'))
+				this.raisingHandNotification = showMessage(t('spreed', 'You are now raising your hand.'))
 			} else {
-				showMessage(t('spreed', 'You are no longer raising your hand.'))
+				this.raisingHandNotification = showMessage(t('spreed', 'You are no longer raising your hand.'))
 			}
 			this.model.toggleHandRaised(raisedHand)
 			this.$store.dispatch('setParticipantHandRaised', { peerId: this.localCallParticipantModel.attributes.peerId, raised: raisedHand })
