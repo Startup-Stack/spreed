@@ -48,7 +48,7 @@ class Version2100Date20201201102528 extends SimpleMigrationStep {
 
 			if (!$table->hasColumn('listable')) {
 				$table->addColumn('listable', Type::INTEGER, [
-					'notnull' => true,
+					'notnull' => false,
 					'length' => 6,
 					'default' => 0,
 				]);
