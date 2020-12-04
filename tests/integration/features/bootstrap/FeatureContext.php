@@ -677,7 +677,7 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	}
 
 	/**
-	 * @Then /^user "([^"]*)" allows listing room "([^"]*)" for "(joined|users|all)" with (\d+)(?: \((v(1|2|3))\))?$/
+	 * @Then /^user "([^"]*)" allows listing room "([^"]*)" for "(none|users|all)" with (\d+)(?: \((v(1|2|3))\))?$/
 	 *
 	 * @param string $user
 	 * @param string $newState
@@ -687,7 +687,7 @@ class FeatureContext implements Context, SnippetAcceptingContext {
 	 */
 	public function userChangesListableScopeOfTheRoom($user, $identifier, $newState, $statusCode, $apiVersion = 'v3') {
 		$this->setCurrentUser($user);
-		if ($newState === 'joined') {
+		if ($newState === 'none') {
 			$newStateValue = Room::LISTABLE_NONE;
 		} elseif ($newState === 'users') {
 			$newStateValue = Room::LISTABLE_USERS;

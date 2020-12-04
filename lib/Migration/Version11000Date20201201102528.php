@@ -32,7 +32,7 @@ use OCP\Migration\SimpleMigrationStep;
 /**
  * Add listable column to the rooms table.
  */
-class Version2100Date20201201102528 extends SimpleMigrationStep {
+class Version11000Date20201201102528 extends SimpleMigrationStep {
 	/**
 	 * @param IOutput $output
 	 * @param Closure $schemaClosure The `\Closure` returns a `ISchemaWrapper`

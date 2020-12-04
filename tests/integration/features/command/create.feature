@@ -42,7 +42,7 @@ Feature: create
       | room1 | 3    | 3               | participant1-displayname, participant2-displayname |
 
   Scenario: Create a room public room for participant1 as owner group1 as users with password and readonly and listable
-    Given invoking occ with "talk:room:create room1 --user participant1 --owner participant1 --public --group group1 --readonly --listable 3 --password test"
+    Given invoking occ with "talk:room:create room1 --user participant1 --owner participant1 --public --group group1 --readonly --listable 2 --password test"
     And the command output contains the text "Room successfully created"
     Then the command was successful
     And user "participant1" is participant of the following rooms
